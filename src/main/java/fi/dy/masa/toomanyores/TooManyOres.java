@@ -1,11 +1,13 @@
 package fi.dy.masa.toomanyores;
 
+import net.minecraftforge.common.MinecraftForge;
 import cpw.mods.fml.common.Mod;
 import cpw.mods.fml.common.Mod.EventHandler;
 import cpw.mods.fml.common.Mod.Instance;
 import cpw.mods.fml.common.event.FMLInitializationEvent;
 import cpw.mods.fml.common.event.FMLPostInitializationEvent;
 import cpw.mods.fml.common.event.FMLPreInitializationEvent;
+import fi.dy.masa.toomanyores.eventhandler.OreGenEventHandler;
 import fi.dy.masa.toomanyores.reference.Reference;
 
 
@@ -24,6 +26,7 @@ public class TooManyOres
     {
         instance = this;
         logger = event.getModLog();
+        MinecraftForge.ORE_GEN_BUS.register(new OreGenEventHandler());
     }
 
     @EventHandler
