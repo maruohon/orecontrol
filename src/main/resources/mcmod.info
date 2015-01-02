@@ -1,8 +1,8 @@
 [
 {
-  "modid": "toomanyores",
-  "name": "Too Many Ores",
-  "description": "Removes ore generation from the world",
+  "modid": "orecontrol",
+  "name": "Ore Control",
+  "description": "Removes vanilla ore generation from the world",
   "version": "${mod_version}",
   "mcversion": "${minecraft_version}",
   "url": "",

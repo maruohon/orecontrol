@@ -1,4 +1,4 @@
-package fi.dy.masa.toomanyores;
+package fi.dy.masa.orecontrol;
 
 import net.minecraftforge.common.MinecraftForge;
 import cpw.mods.fml.common.Mod;
@@ -7,18 +7,16 @@ import cpw.mods.fml.common.Mod.Instance;
 import cpw.mods.fml.common.event.FMLInitializationEvent;
 import cpw.mods.fml.common.event.FMLPostInitializationEvent;
 import cpw.mods.fml.common.event.FMLPreInitializationEvent;
-import fi.dy.masa.toomanyores.eventhandler.OreGenEventHandler;
-import fi.dy.masa.toomanyores.reference.Reference;
+import fi.dy.masa.orecontrol.eventhandler.OreGenEventHandler;
+import fi.dy.masa.orecontrol.reference.Reference;
 
 
 @Mod(modid = Reference.MOD_ID, name = Reference.MOD_NAME, version = Reference.MOD_VERSION)
-public class TooManyOres
+public class OreControl
 {
     @Instance(Reference.MOD_ID)
-    public static TooManyOres instance;
+    public static OreControl instance;
 
-    //@SidedProxy(clientSide = Reference.PROXY_CLASS_CLIENT, serverSide = Reference.PROXY_CLASS_SERVER)
-    //public static IProxy proxy;
     public static org.apache.logging.log4j.Logger logger;
 
     @EventHandler
