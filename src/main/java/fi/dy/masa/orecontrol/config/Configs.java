@@ -10,6 +10,7 @@ public class Configs
 {
     public static Property confDisableRegularVanillaGen;
     public static Property confDisableRegularVanillaOres;
+    public static Property confDisableCustom;
     public static Property confDisableDirt;
     public static Property confDisableGravel;
     public static Property confDisableCoal;
@@ -25,6 +26,7 @@ public class Configs
 
     public static boolean disableRegularVanillaGen;
     public static boolean disableRegularVanillaOres;
+    public static boolean disableCustom;
     public static boolean disableDirt;
     public static boolean disableGravel;
     public static boolean disableCoal;
@@ -52,6 +54,9 @@ public class Configs
 
         confDisableRegularVanillaOres = conf.get(category, "disableRegularVanillaOres", false);
         confDisableRegularVanillaOres.comment = "Disables \"regular\" vanilla _ore_ generation, including Nether Quartz. This does not include Emeralds in Extreme Hills biomes, which are not part of the regular ore generation.";
+
+        confDisableCustom = conf.get(category, "disableCustom", false);
+        confDisableCustom.comment = "Disables custom ore generation. NOTE: Very few mods actually use the OreGenEvent.GenerateMinable event though, and this only works with those that do.";
 
         confDisableDirt = conf.get(category, "disableDirt", false);
         confDisableDirt.comment = "Disables Dirt pocket generation inside stone.";
@@ -98,6 +103,7 @@ public class Configs
     {
         disableRegularVanillaGen    = confDisableRegularVanillaGen.getBoolean();
         disableRegularVanillaOres   = confDisableRegularVanillaOres.getBoolean();
+        disableCustom               = confDisableCustom.getBoolean();
         disableDirt                 = disableRegularVanillaGen || confDisableDirt.getBoolean();
         disableGravel               = disableRegularVanillaGen || confDisableGravel.getBoolean();
         disableCoal                 = disableRegularVanillaOres || confDisableCoal.getBoolean();
