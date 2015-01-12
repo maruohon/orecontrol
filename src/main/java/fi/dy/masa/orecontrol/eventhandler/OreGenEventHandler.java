@@ -35,6 +35,24 @@ public class OreGenEventHandler
         // Individual ore types
         switch(event.type)
         {
+            case DIORITE:
+                if (Configs.disableDiorite == true)
+                {
+                    event.setResult(Event.Result.DENY);
+                }
+                break;
+            case GRANITE:
+                if (Configs.disableGranite == true)
+                {
+                    event.setResult(Event.Result.DENY);
+                }
+                break;
+            case ANDESITE:
+                if (Configs.disableAndesite == true)
+                {
+                    event.setResult(Event.Result.DENY);
+                }
+                break;
             case DIRT:
                 if (Configs.disableDirt == true)
                 {

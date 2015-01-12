@@ -11,6 +11,9 @@ public class Configs
     public static Property confDisableRegularVanillaGen;
     public static Property confDisableRegularVanillaOres;
     public static Property confDisableCustom;
+    public static Property confDisableDiorite;
+    public static Property confDisableGranite;
+    public static Property confDisableAndesite;
     public static Property confDisableDirt;
     public static Property confDisableGravel;
     public static Property confDisableCoal;
@@ -27,6 +30,9 @@ public class Configs
     public static boolean disableRegularVanillaGen;
     public static boolean disableRegularVanillaOres;
     public static boolean disableCustom;
+    public static boolean disableDiorite;
+    public static boolean disableGranite;
+    public static boolean disableAndesite;
     public static boolean disableDirt;
     public static boolean disableGravel;
     public static boolean disableCoal;
@@ -57,6 +63,15 @@ public class Configs
 
         confDisableCustom = conf.get(category, "disableCustom", false);
         confDisableCustom.comment = "Disables custom ore generation. NOTE: Very few mods actually use the OreGenEvent.GenerateMinable event though, and this only works with those that do.";
+
+        confDisableDiorite = conf.get(category, "disableDiorite", false);
+        confDisableDiorite.comment = "Disables Diorite pocket generation inside regular stone.";
+
+        confDisableGranite = conf.get(category, "disableGranite", false);
+        confDisableGranite.comment = "Disables Granite pocket generation inside regular stone.";
+
+        confDisableAndesite = conf.get(category, "disableAndesite", false);
+        confDisableAndesite.comment = "Disables Andesite pocket generation inside regular stone.";
 
         confDisableDirt = conf.get(category, "disableDirt", false);
         confDisableDirt.comment = "Disables Dirt pocket generation inside stone.";
@@ -104,6 +119,9 @@ public class Configs
         disableRegularVanillaGen    = confDisableRegularVanillaGen.getBoolean();
         disableRegularVanillaOres   = confDisableRegularVanillaOres.getBoolean();
         disableCustom               = confDisableCustom.getBoolean();
+        disableDiorite              = disableRegularVanillaGen || confDisableDiorite.getBoolean();
+        disableGranite              = disableRegularVanillaGen || confDisableGranite.getBoolean();
+        disableAndesite             = disableRegularVanillaGen || confDisableAndesite.getBoolean();
         disableDirt                 = disableRegularVanillaGen || confDisableDirt.getBoolean();
         disableGravel               = disableRegularVanillaGen || confDisableGravel.getBoolean();
         disableCoal                 = disableRegularVanillaOres || confDisableCoal.getBoolean();
