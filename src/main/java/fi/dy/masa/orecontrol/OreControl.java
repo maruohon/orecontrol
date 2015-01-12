@@ -14,7 +14,7 @@ import fi.dy.masa.orecontrol.eventhandler.OreGenEventHandler;
 import fi.dy.masa.orecontrol.reference.Reference;
 
 
-@Mod(modid = Reference.MOD_ID, name = Reference.MOD_NAME, version = Reference.MOD_VERSION)
+@Mod(modid = Reference.MOD_ID, name = Reference.MOD_NAME, version = Reference.MOD_VERSION, acceptableRemoteVersions="*")
 public class OreControl
 {
     @Instance(Reference.MOD_ID)
