@@ -16,15 +16,22 @@ public class OreGenEventHandler
 
         if (event.type == EventType.CUSTOM)
         {
+            if (Configs.disableCustom == true)
+            {
+                event.setResult(Event.Result.DENY);
+            }
+
             return;
         }
 
+        // Disable ALL vanilla generation, including dirt and gravel pockets.
         if (Configs.disableRegularVanillaGen == true)
         {
             event.setResult(Event.Result.DENY);
             return;
         }
 
+        // Individual ore types
         switch(event.type)
         {
             case DIRT:
