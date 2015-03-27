@@ -6,11 +6,11 @@ import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.Mod.EventHandler;
 import net.minecraftforge.fml.common.Mod.Instance;
-import net.minecraftforge.fml.common.event.FMLPostInitializationEvent;
 import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
 import net.minecraftforge.fml.common.event.FMLServerAboutToStartEvent;
 import fi.dy.masa.orecontrol.config.Configs;
 import fi.dy.masa.orecontrol.eventhandler.OreGenEventHandler;
+import fi.dy.masa.orecontrol.eventhandler.PopulateChunkEventHandler;
 import fi.dy.masa.orecontrol.reference.Reference;
 
 
@@ -29,13 +29,9 @@ public class OreControl
         instance = this;
         logger = event.getModLog();
         configFile = event.getSuggestedConfigurationFile();
-        //Configs.loadConfigs(event.getSuggestedConfigurationFile());
-        MinecraftForge.ORE_GEN_BUS.register(new OreGenEventHandler());
-    }
 
-    @EventHandler
-    public void postInit(FMLPostInitializationEvent event)
-    {
+        MinecraftForge.ORE_GEN_BUS.register(new OreGenEventHandler());
+        MinecraftForge.EVENT_BUS.register(new PopulateChunkEventHandler());
     }
 
     @EventHandler

@@ -6,7 +6,6 @@ import net.minecraftforge.fml.common.eventhandler.Event;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import fi.dy.masa.orecontrol.config.Configs;
 
-
 public class OreGenEventHandler
 {
     @SubscribeEvent
