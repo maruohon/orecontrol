@@ -10,6 +10,7 @@ import cpw.mods.fml.common.event.FMLPreInitializationEvent;
 import cpw.mods.fml.common.event.FMLServerAboutToStartEvent;
 import fi.dy.masa.orecontrol.config.Configs;
 import fi.dy.masa.orecontrol.eventhandler.OreGenEventHandler;
+import fi.dy.masa.orecontrol.eventhandler.PopulateChunkEventHandler;
 import fi.dy.masa.orecontrol.reference.Reference;
 
 
@@ -30,6 +31,7 @@ public class OreControl
         configFile = event.getSuggestedConfigurationFile();
 
         MinecraftForge.ORE_GEN_BUS.register(new OreGenEventHandler());
+        MinecraftForge.EVENT_BUS.register(new PopulateChunkEventHandler());
     }
 
     @EventHandler

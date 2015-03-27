@@ -84,11 +84,11 @@ public class Configs
 
         // Special ores, not part of regular ore generation
         prop = conf.get(category, "disableEmerald", false);
-        prop.comment = "Disables Emerald Ore generation in Extreme Hills biomes. NOTE: To achieve this, the BiomeGenHills generator will be replaced.";
+        prop.comment = "Disables Emerald Ore generation in Extreme Hills biomes. NOTE: This will be done after chunk population by replacing all Emerald ore with Stone.";
         disableEmerald = prop.getBoolean();
 
         prop = conf.get(category, "disableMonsterEgg", false);
-        prop.comment = "Disables Monster Egg (= Silverfish block) generation in Extreme Hills biomes. NOTE: To achieve this, the BiomeGenHills generator will be replaced.";
+        prop.comment = "Disables Monster Egg (= Silverfish block) generation in Extreme Hills biomes. NOTE: This will be done after chunk population by replacing all Monster Eggs with Stone.";
         disableMonsterEgg = prop.getBoolean();
 
         if (conf.hasChanged() == true)
