@@ -5,7 +5,7 @@
   "description": "Removes vanilla ore generation from the world",
   "version": "${mod_version}",
   "mcversion": "${minecraft_version}",
-  "url": "",
+  "url": "http://minecraft.curseforge.com/projects/ore-control",
   "updateUrl": "",
   "authorList": ["masa"],
   "credits": "",
