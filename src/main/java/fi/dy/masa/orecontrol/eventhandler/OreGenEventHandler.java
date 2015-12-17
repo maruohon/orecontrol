@@ -1,10 +1,10 @@
 package fi.dy.masa.orecontrol.eventhandler;
 
+import fi.dy.masa.orecontrol.config.Configs;
 import net.minecraftforge.event.terraingen.OreGenEvent;
 import net.minecraftforge.event.terraingen.OreGenEvent.GenerateMinable.EventType;
 import net.minecraftforge.fml.common.eventhandler.Event;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
-import fi.dy.masa.orecontrol.config.Configs;
 
 public class OreGenEventHandler
 {
@@ -25,7 +25,7 @@ public class OreGenEventHandler
         }
 
         // Disable ALL vanilla generation, including dirt and gravel pockets.
-        if (Configs.disableRegularVanillaGen == true)
+        if (Configs.disableAllVanillaGeneration == true)
         {
             event.setResult(Event.Result.DENY);
             return;
@@ -102,6 +102,18 @@ public class OreGenEventHandler
                 break;
             case QUARTZ:
                 if (Configs.disableNetherQuartz == true)
+                {
+                    event.setResult(Event.Result.DENY);
+                }
+                break;
+            case EMERALD:
+                if (Configs.disableEmerald == true)
+                {
+                    event.setResult(Event.Result.DENY);
+                }
+                break;
+            case SILVERFISH:
+                if (Configs.disableSilverfish == true)
                 {
                     event.setResult(Event.Result.DENY);
                 }
