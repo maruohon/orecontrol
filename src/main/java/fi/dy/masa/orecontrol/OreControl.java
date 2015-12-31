@@ -14,7 +14,7 @@ import net.minecraftforge.fml.common.event.FMLServerAboutToStartEvent;
 
 
 @Mod(modid = Reference.MOD_ID, name = Reference.MOD_NAME, version = Reference.MOD_VERSION,
-    dependencies = "required-after:Forge@[11.15.0.1618,)", acceptableRemoteVersions="*")
+    dependencies = "required-after:Forge@[11.15.0.1618,)", acceptableRemoteVersions="*", acceptedMinecraftVersions = "[1.8,1.9)")
 public class OreControl
 {
     @Instance(Reference.MOD_ID)

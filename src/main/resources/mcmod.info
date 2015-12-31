@@ -2,7 +2,7 @@
 {
   "modid": "orecontrol",
   "name": "Ore Control",
-  "description": "Removes vanilla ore generation from the world",
+  "description": "Can remove some or all vanilla ore generation",
   "version": "${mod_version}",
   "mcversion": "${minecraft_version}",
   "url": "http://minecraft.curseforge.com/projects/ore-control",
