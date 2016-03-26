@@ -14,7 +14,9 @@ public class OreGenEventHandler
         //OreControl.logger.info("Type: " + event.type.toString() + (event.generator != null ? " generator: " + event.generator.toString() : ""));
         //OreControl.logger.info("Type: " + event.type + " worldX: " + event.worldX + " worldZ: " + event.worldZ);
 
-        if (event.type == EventType.CUSTOM)
+        EventType type = event.getType();
+
+        if (type == EventType.CUSTOM)
         {
             if (Configs.disableCustom == true)
             {
@@ -32,7 +34,7 @@ public class OreGenEventHandler
         }
 
         // Individual ore types
-        switch(event.type)
+        switch(type)
         {
             case DIORITE:
                 if (Configs.disableDiorite == true)
