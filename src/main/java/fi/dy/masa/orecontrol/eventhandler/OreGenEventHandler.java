@@ -18,7 +18,7 @@ public class OreGenEventHandler
 
         if (type == EventType.CUSTOM)
         {
-            if (Configs.disableCustom == true)
+            if (Configs.disableCustom)
             {
                 event.setResult(Event.Result.DENY);
             }
@@ -27,7 +27,7 @@ public class OreGenEventHandler
         }
 
         // Disable ALL vanilla generation, including dirt and gravel pockets.
-        if (Configs.disableAllVanillaGeneration == true)
+        if (Configs.disableAllVanillaGeneration)
         {
             event.setResult(Event.Result.DENY);
             return;
@@ -37,85 +37,85 @@ public class OreGenEventHandler
         switch(type)
         {
             case DIORITE:
-                if (Configs.disableDiorite == true)
+                if (Configs.disableDiorite)
                 {
                     event.setResult(Event.Result.DENY);
                 }
                 break;
             case GRANITE:
-                if (Configs.disableGranite == true)
+                if (Configs.disableGranite)
                 {
                     event.setResult(Event.Result.DENY);
                 }
                 break;
             case ANDESITE:
-                if (Configs.disableAndesite == true)
+                if (Configs.disableAndesite)
                 {
                     event.setResult(Event.Result.DENY);
                 }
                 break;
             case DIRT:
-                if (Configs.disableDirt == true)
+                if (Configs.disableDirt)
                 {
                     event.setResult(Event.Result.DENY);
                 }
                 break;
             case GRAVEL:
-                if (Configs.disableGravel == true)
+                if (Configs.disableGravel)
                 {
                     event.setResult(Event.Result.DENY);
                 }
                 break;
             case COAL:
-                if (Configs.disableCoal == true)
+                if (Configs.disableCoal)
                 {
                     event.setResult(Event.Result.DENY);
                 }
                 break;
             case DIAMOND:
-                if (Configs.disableDiamond == true)
+                if (Configs.disableDiamond)
                 {
                     event.setResult(Event.Result.DENY);
                 }
                 break;
             case GOLD:
-                if (Configs.disableGold == true)
+                if (Configs.disableGold)
                 {
                     event.setResult(Event.Result.DENY);
                 }
                 break;
             case IRON:
-                if (Configs.disableIron == true)
+                if (Configs.disableIron)
                 {
                     event.setResult(Event.Result.DENY);
                 }
                 break;
             case LAPIS:
-                if (Configs.disableLapis == true)
+                if (Configs.disableLapis)
                 {
                     event.setResult(Event.Result.DENY);
                 }
                 break;
             case REDSTONE:
-                if (Configs.disableRedstone == true)
+                if (Configs.disableRedstone)
                 {
                     event.setResult(Event.Result.DENY);
                 }
                 break;
             case QUARTZ:
-                if (Configs.disableNetherQuartz == true)
+                if (Configs.disableNetherQuartz)
                 {
                     event.setResult(Event.Result.DENY);
                 }
                 break;
             case EMERALD:
-                if (Configs.disableEmerald == true)
+                if (Configs.disableEmerald)
                 {
                     event.setResult(Event.Result.DENY);
                 }
                 break;
             case SILVERFISH:
-                if (Configs.disableSilverfish == true)
+                if (Configs.disableSilverfish)
                 {
                     event.setResult(Event.Result.DENY);
                 }
