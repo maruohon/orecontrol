@@ -1,115 +1,171 @@
 package fi.dy.masa.orecontrol.config;
 
 import java.io.File;
-import fi.dy.masa.orecontrol.OreControl;
+import java.util.EnumMap;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+import net.minecraft.world.World;
 import net.minecraftforge.common.config.Configuration;
 import net.minecraftforge.common.config.Property;
+import net.minecraftforge.event.terraingen.DecorateBiomeEvent;
+import net.minecraftforge.event.terraingen.OreGenEvent;
+import net.minecraftforge.event.terraingen.PopulateChunkEvent;
+import fi.dy.masa.orecontrol.OreControl;
+import fi.dy.masa.orecontrol.reference.Reference;
+import gnu.trove.map.hash.TIntObjectHashMap;
 
 public class Configs
 {
-    public static boolean disableAllVanillaGeneration;
-    public static boolean disableVanillaOres;
-    public static boolean disableCustom;
+    private static final Pattern CONFIG_FILE_PATTERN = Pattern.compile(Reference.MOD_ID + "_dim(-?[0-9]+)\\.cfg");
+    private static final TIntObjectHashMap<Configs> DIM_CONFIGS = new TIntObjectHashMap<Configs>();
+    private static Configs masterConfig;
+    private boolean enablePerDimensionConfigs;
+    private boolean minablesDisableAllVanillaGeneration;
 
-    public static boolean disableDiorite;
-    public static boolean disableGranite;
-    public static boolean disableAndesite;
+    private EnumMap<OreGenEvent.GenerateMinable.EventType, Boolean> disabledMinables;
+    private EnumMap<DecorateBiomeEvent.Decorate.EventType, Boolean> disabledDecorations;
+    private EnumMap<PopulateChunkEvent.Populate.EventType, Boolean> disabledPopulations;
 
-    public static boolean disableDirt;
-    public static boolean disableGravel;
-
-    public static boolean disableCoal;
-    public static boolean disableDiamond;
-    public static boolean disableGold;
-    public static boolean disableIron;
-    public static boolean disableLapis;
-    public static boolean disableRedstone;
-    public static boolean disableNetherQuartz;
-    public static boolean disableEmerald;
-    public static boolean disableSilverfish;
-
-
-    public static void loadConfigs(File configFile)
+    private Configs(File configFile, boolean isMaster)
     {
-        OreControl.logger.info("Loading configuration...");
+        this.disabledMinables = new EnumMap<OreGenEvent.GenerateMinable.EventType, Boolean>(OreGenEvent.GenerateMinable.EventType.class);
+        this.disabledDecorations = new EnumMap<DecorateBiomeEvent.Decorate.EventType, Boolean>(DecorateBiomeEvent.Decorate.EventType.class);
+        this.disabledPopulations = new EnumMap<PopulateChunkEvent.Populate.EventType, Boolean>(PopulateChunkEvent.Populate.EventType.class);
+        this.loadConfigs(configFile, isMaster);
+    }
 
-        Configuration conf = new Configuration(configFile);
+    public static Configs get(World world)
+    {
+        int dimension = world.provider.getDimension();
+        Configs cfg = DIM_CONFIGS.get(dimension);
+
+        return cfg != null ? cfg : masterConfig;
+    }
+
+    public static void readConfigs(File modConfigDir)
+    {
+        modConfigDir.mkdirs();
+        DIM_CONFIGS.clear();
+        masterConfig = new Configs(new File(modConfigDir, Reference.MOD_ID + ".cfg"), true);
+
+        if (masterConfig.enablePerDimensionConfigs)
+        {
+            for (File file : modConfigDir.listFiles())
+            {
+                Matcher matcher = CONFIG_FILE_PATTERN.matcher(file.getName());
+
+                if (matcher.matches())
+                {
+                    try
+                    {
+                        int dimension = Integer.parseInt(matcher.group(1));
+                        DIM_CONFIGS.put(dimension, new Configs(file, false));
+                    }
+                    catch (NumberFormatException e)
+                    {
+                        OreControl.logger.warn("Failed to parse dimension id from config filename from '{}'", file.getName());
+                    }
+                }
+            }
+        }
+    }
+
+    private void loadConfigs(File configFile, boolean isMaster)
+    {
+        OreControl.logger.info("Loading configuration from '{}'", configFile.getName());
+
+        Configuration conf = new Configuration(configFile, null, true);
         conf.load();
 
         Property prop;
-        String category = "vanilla";
+        String category;
+
+        if (isMaster)
+        {
+            category = "Generic";
+
+            prop = conf.get(category, "enablePerDimensionConfigs", false);
+            prop.setComment("If true, then per-dimension configs named like 'orecontrol_dim1.cfg' will override the master config, if they exist");
+            this.enablePerDimensionConfigs = prop.getBoolean();
+        }
+
+        category = "Minable";
 
         prop = conf.get(category, "disableAllVanillaGeneration", false);
         prop.setComment("Disables all vanilla generation of \"pockets-of-resources-inside-stone\". This includes all ores and also Dirt/Gravel/Andesite/Diorite/Granite, and since v0.3.1 also Emerald Ore and Silverfish blocks in Extreme Hills biomes.");
-        disableAllVanillaGeneration = prop.getBoolean();
+        this.minablesDisableAllVanillaGeneration = prop.getBoolean();
 
-        prop = conf.get(category, "disableVanillaOres", false);
-        prop.setComment("Disables all vanilla _ore_ generation, including Emerald Ore in Extreme Hills biomes and Nether Quartz in the Nether.");
-        disableVanillaOres = prop.getBoolean();
+        this.disabledMinables.clear();
 
-        prop = conf.get(category, "disableCustom", false);
-        prop.setComment("Disables custom ore generation. NOTE: Very few mods actually use the OreGenEvent.GenerateMinable event though, and this only works with those that do.");
-        disableCustom = prop.getBoolean();
+        for (OreGenEvent.GenerateMinable.EventType type : OreGenEvent.GenerateMinable.EventType.values())
+        {
+            prop = conf.get(category, "disable" + type, false);
+            this.disabledMinables.put(type, prop.getBoolean());
 
-        prop = conf.get(category, "disableAndesite", false);
-        prop.setComment("Disables Andesite pocket generation inside regular stone.");
-        disableAndesite = prop.getBoolean() || disableAllVanillaGeneration;
+            String comment = COMMENTS_MINABLES.get(type);
 
-        prop = conf.get(category, "disableDiorite", false);
-        prop.setComment("Disables Diorite pocket generation inside regular stone.");
-        disableDiorite = prop.getBoolean() || disableAllVanillaGeneration;
+            if (comment != null)
+            {
+                prop.setComment(comment);
+            }
+        }
 
-        prop = conf.get(category, "disableGranite", false);
-        prop.setComment("Disables Granite pocket generation inside regular stone.");
-        disableGranite = prop.getBoolean() || disableAllVanillaGeneration;
+        category = "Decorate";
+        this.disabledDecorations.clear();
 
-        prop = conf.get(category, "disableDirt", false);
-        prop.setComment("Disables Dirt pocket generation inside stone.");
-        disableDirt = prop.getBoolean() || disableAllVanillaGeneration;
+        for (DecorateBiomeEvent.Decorate.EventType type : DecorateBiomeEvent.Decorate.EventType.values())
+        {
+            prop = conf.get(category, "disable" + type, false);
+            this.disabledDecorations.put(type, prop.getBoolean());
+        }
 
-        prop = conf.get(category, "disableGravel", false);
-        prop.setComment("Disables Gravel pocket generation inside stone.");
-        disableGravel = prop.getBoolean() || disableAllVanillaGeneration;
+        category = "Populate";
+        this.disabledPopulations.clear();
 
-        prop = conf.get(category, "disableCoal", false);
-        prop.setComment("Disables Coal Ore generation.");
-        disableCoal = prop.getBoolean() || disableVanillaOres;
+        for (PopulateChunkEvent.Populate.EventType type : PopulateChunkEvent.Populate.EventType.values())
+        {
+            prop = conf.get(category, "disable" + type, false);
+            this.disabledPopulations.put(type, prop.getBoolean());
+        }
 
-        prop = conf.get(category, "disableDiamond", false);
-        prop.setComment("Disables Diamond Ore generation.");
-        disableDiamond = prop.getBoolean() || disableVanillaOres;
-
-        prop = conf.get(category, "disableGold", false);
-        prop.setComment("Disables Gold Ore generation.");
-        disableGold = prop.getBoolean() || disableVanillaOres;
-
-        prop = conf.get(category, "disableIron", false);
-        prop.setComment("Disables Iron Ore generation.");
-        disableIron = prop.getBoolean() || disableVanillaOres;
-
-        prop = conf.get(category, "disableLapis", false);
-        prop.setComment("Disables Lapis Ore generation.");
-        disableLapis = prop.getBoolean() || disableVanillaOres;
-
-        prop = conf.get(category, "disableNetherQuartz", false);
-        prop.setComment("Disables Nether Quartz Ore generation.");
-        disableNetherQuartz = prop.getBoolean() || disableVanillaOres;
-
-        prop = conf.get(category, "disableRedstone", false);
-        prop.setComment("Disables Redstone Ore generation.");
-        disableRedstone = prop.getBoolean() || disableVanillaOres;
-
-        prop = conf.get(category, "disableEmerald", false);
-        prop.setComment("Disables Emerald Ore generation (in Extreme Hills biomes).");
-        disableEmerald = prop.getBoolean() || disableVanillaOres;
-
-        prop = conf.get(category, "disableSilverfish", false);
-        prop.setComment("Disables Silverfish block (= Monster Egg) generation (in Extreme Hills biomes).");
-        disableSilverfish = prop.getBoolean() || disableAllVanillaGeneration;
-
-        if (conf.hasChanged() == true)
+        if (conf.hasChanged())
         {
             conf.save();
         }
+    }
+
+    public boolean minablesDisableAllVanillaGeneration()
+    {
+        return this.minablesDisableAllVanillaGeneration;
+    }
+
+    public boolean minableIsDisabled(OreGenEvent.GenerateMinable.EventType type)
+    {
+        return this.disabledMinables.get(type);
+    }
+
+    public boolean decorationIsDisabled(DecorateBiomeEvent.Decorate.EventType type)
+    {
+        return this.disabledDecorations.get(type);
+    }
+
+    public boolean populationIsDisabled(PopulateChunkEvent.Populate.EventType type)
+    {
+        return this.disabledPopulations.get(type);
+    }
+
+    private static final EnumMap<OreGenEvent.GenerateMinable.EventType, String> COMMENTS_MINABLES
+        = new EnumMap<OreGenEvent.GenerateMinable.EventType, String>(OreGenEvent.GenerateMinable.EventType.class);
+
+    static
+    {
+        COMMENTS_MINABLES.put(OreGenEvent.GenerateMinable.EventType.ANDESITE, "Disables Andesite pocket generation inside regular stone.");
+        COMMENTS_MINABLES.put(OreGenEvent.GenerateMinable.EventType.CUSTOM, "Disables custom ore generation. NOTE: Very few mods seem to actually use the OreGenEvent.GenerateMinable event though, and this only works with those that do.");
+        COMMENTS_MINABLES.put(OreGenEvent.GenerateMinable.EventType.DIORITE, "Disables Diorite pocket generation inside regular stone.");
+        COMMENTS_MINABLES.put(OreGenEvent.GenerateMinable.EventType.DIRT, "Disables Dirt pocket generation inside stone.");
+        COMMENTS_MINABLES.put(OreGenEvent.GenerateMinable.EventType.EMERALD, "Disables Emerald Ore generation (in Extreme Hills biomes).");
+        COMMENTS_MINABLES.put(OreGenEvent.GenerateMinable.EventType.GRANITE, "Disables Granite pocket generation inside regular stone.");
+        COMMENTS_MINABLES.put(OreGenEvent.GenerateMinable.EventType.GRAVEL, "Disables Gravel pocket generation inside stone.");
+        COMMENTS_MINABLES.put(OreGenEvent.GenerateMinable.EventType.SILVERFISH, "Disables Silverfish block (= Monster Egg) generation (in Extreme Hills biomes).");
     }
 }
