@@ -1,7 +1,8 @@
 package fi.dy.masa.orecontrol.config;
 
 import java.io.File;
-import java.util.EnumMap;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import net.minecraft.world.World;
@@ -22,15 +23,15 @@ public class Configs
     private boolean enablePerDimensionConfigs;
     private boolean minablesDisableAllVanillaGeneration;
 
-    private EnumMap<OreGenEvent.GenerateMinable.EventType, Boolean> disabledMinables;
-    private EnumMap<DecorateBiomeEvent.Decorate.EventType, Boolean> disabledDecorations;
-    private EnumMap<PopulateChunkEvent.Populate.EventType, Boolean> disabledPopulations;
+    private Map<OreGenEvent.GenerateMinable.EventType, Boolean> disabledMinables;
+    private Map<DecorateBiomeEvent.Decorate.EventType, Boolean> disabledDecorations;
+    private Map<PopulateChunkEvent.Populate.EventType, Boolean> disabledPopulations;
 
     private Configs(File configFile, boolean isMaster)
     {
-        this.disabledMinables = new EnumMap<OreGenEvent.GenerateMinable.EventType, Boolean>(OreGenEvent.GenerateMinable.EventType.class);
-        this.disabledDecorations = new EnumMap<DecorateBiomeEvent.Decorate.EventType, Boolean>(DecorateBiomeEvent.Decorate.EventType.class);
-        this.disabledPopulations = new EnumMap<PopulateChunkEvent.Populate.EventType, Boolean>(PopulateChunkEvent.Populate.EventType.class);
+        this.disabledMinables = new HashMap<OreGenEvent.GenerateMinable.EventType, Boolean>();
+        this.disabledDecorations = new HashMap<DecorateBiomeEvent.Decorate.EventType, Boolean>();
+        this.disabledPopulations = new HashMap<PopulateChunkEvent.Populate.EventType, Boolean>();
         this.loadConfigs(configFile, isMaster);
     }
 
@@ -154,8 +155,8 @@ public class Configs
         return this.disabledPopulations.get(type);
     }
 
-    private static final EnumMap<OreGenEvent.GenerateMinable.EventType, String> COMMENTS_MINABLES
-        = new EnumMap<OreGenEvent.GenerateMinable.EventType, String>(OreGenEvent.GenerateMinable.EventType.class);
+    private static final Map<OreGenEvent.GenerateMinable.EventType, String> COMMENTS_MINABLES
+        = new HashMap<OreGenEvent.GenerateMinable.EventType, String>();
 
     static
     {
