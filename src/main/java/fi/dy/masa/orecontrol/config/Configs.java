@@ -142,17 +142,20 @@ public class Configs
 
     public boolean minableIsDisabled(OreGenEvent.GenerateMinable.EventType type)
     {
-        return this.disabledMinables.get(type);
+        Boolean value = this.disabledMinables.get(type);
+        return value != null && value.booleanValue();
     }
 
     public boolean decorationIsDisabled(DecorateBiomeEvent.Decorate.EventType type)
     {
-        return this.disabledDecorations.get(type);
+        Boolean value = this.disabledDecorations.get(type);
+        return value != null && value.booleanValue();
     }
 
     public boolean populationIsDisabled(PopulateChunkEvent.Populate.EventType type)
     {
-        return this.disabledPopulations.get(type);
+        Boolean value = this.disabledPopulations.get(type);
+        return value != null && value.booleanValue();
     }
 
     private static final Map<OreGenEvent.GenerateMinable.EventType, String> COMMENTS_MINABLES
