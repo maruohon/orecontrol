@@ -11,7 +11,7 @@ import fi.dy.masa.orecontrol.reference.Reference;
 
 
 @Mod(modid = Reference.MOD_ID, name = Reference.MOD_NAME, version = Reference.MOD_VERSION,
-    acceptableRemoteVersions="*", acceptedMinecraftVersions = "[1.10.2,1.11.2]")
+    acceptableRemoteVersions="*", acceptedMinecraftVersions = "1.12")
 public class OreControl
 {
     @Mod.Instance(Reference.MOD_ID)
