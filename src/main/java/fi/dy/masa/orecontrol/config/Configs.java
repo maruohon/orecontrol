@@ -27,6 +27,8 @@ public class Configs
     private Map<DecorateBiomeEvent.Decorate.EventType, Boolean> disabledDecorations;
     private Map<PopulateChunkEvent.Populate.EventType, Boolean> disabledPopulations;
 
+    public boolean disableSurfaceLavaLakes;
+
     private Configs(File configFile, boolean isMaster)
     {
         this.disabledMinables = new HashMap<OreGenEvent.GenerateMinable.EventType, Boolean>();
@@ -128,6 +130,11 @@ public class Configs
             prop = conf.get(category, "disable" + type, false);
             this.disabledPopulations.put(type, prop.getBoolean());
         }
+
+        category = "Custom";
+
+        prop = conf.get(category, "disableSurfaceLavaLakes", false, "Disable lava lakes on the surface.\nThis disables all lava lakes via the vanilla code, and tries to\n generate the underground lakes via the mod code.");
+        this.disableSurfaceLavaLakes = prop.getBoolean();
 
         if (conf.hasChanged())
         {
